@@ -54,7 +54,7 @@ class NoteList extends React.Component
                         (value) => 
                         {
                             return (
-                                <NoteBox 
+                                <NoteBox
                                     callBack={this.props.callBack}
                                     note={value} 
                                 />

@@ -2,53 +2,44 @@ import React from 'react';
 import quill from './quill.svg';
 import newIcon from './new.png';
 import newHover from './new-hover.png';
+import { StyleSheet, css } from 'aphrodite';
 
-class Sidebar extends React.Component 
+const Sidebar = () =>
 {
-    constructor(props)
-    {
-        super(props);
-        this.state = 
-        {
-            aHover: false,
-        }
-    }
-    render()
-    {
-        return(
-            <nav style={styles.Sidebar} className="Sidebar">
-                <div style={styles.logo} className="logo">
-                    <img style={styles.logoImg} src={quill} alt="Noteherder" />
-                </div>
-                <a  
-                    className="new-note" 
-                    href="/notes"
-                    onMouseEnter= {() =>
-                        {
-                            this.setState(
-                                {aHover: true}
-                            )
-                        }
-                    }
+    return(
+        <nav className={css(styles.Sidebar)}>
+            <div className={css(styles.logo)}>
+                <img className={css(styles.logoImg)} src={quill} alt="Noteherder" />
+            </div>
+            <a  
+                className={css(styles.newNote)} 
+                href="/notes"
+            >
+                <img 
+                    src={newHover} 
+                    alt="New note" 
+                    className={css(styles.img)}
+                />
+                <img 
+                    className={css(styles.img, styles.imgOutline)} src={newIcon} alt="New note" 
+                />
+            </a>
+            <div className={css(styles.SignOut)} >
+                <button
+                    className={css(styles.SignOutButton, styles.button)}
                 >
-                    <img 
-                        src={newHover} 
-                        alt="New note" 
-                    />
-                    <img className="outline" src={newIcon} alt="New note" />
-                </a>
-                <div className="SignOut">
-                    <button >
-                        <i className="fa fa-sign-out"></i>
-                    </button>
-                </div>
-            </nav>
-        );
-    }
+                    <i 
+                        className={`fa fa-sign-out ${css(styles.SignOutFont)}` }
+                    >
+                    </i>
+                </button>
+            </div>
+        </nav>
+    );
 }
 
 
-const styles =
+const styles = StyleSheet.create(
 {
     Sidebar : 
     {
@@ -96,14 +87,31 @@ const styles =
         transition: 'opacity 0.25s ease-in-out',
     },
 
-    imgHover:
+    imgOutline:
+    {
+        ':hover':
+        {
+            opacity: '0',
+        }
+        
+    },
+
+    SignOut:
     {
         position: 'absolute',
-        left: '0',
-        width: '100%',
-        transition: 'opacity 0.25s ease-in-out',
-        opacity: '0',
+        bottom: '1rem',
     },
-    
+
+    SignOutButton:
+    {
+        outline: 'none',
+    },
+
+    SignOutFont:
+    {
+        fontSize: '2rem',
+    }
+
 }
+);
 export default Sidebar;

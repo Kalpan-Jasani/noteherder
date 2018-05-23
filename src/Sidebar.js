@@ -4,7 +4,7 @@ import newIcon from './new.png';
 import newHover from './new-hover.png';
 import { StyleSheet, css } from 'aphrodite';
 
-const Sidebar = () =>
+const Sidebar = (props) =>
 {
     return(
         <nav className={css(styles.Sidebar)}>
@@ -14,6 +14,12 @@ const Sidebar = () =>
             <a  
                 className={css(styles.newNote)} 
                 href="/notes"
+                onClick={ (ev) =>
+                    {
+                        ev.preventDefault();
+                        props.onAddCallback();
+                    }
+                }
             >
                 <img 
                     src={newHover} 

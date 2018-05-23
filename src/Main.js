@@ -9,22 +9,41 @@ class Main extends React.Component {
         super(props);
         this.state = 
         {
-            note: {
+            //setting current note to an empty note initially, not null or undefined
+            currentNote: {
                 noteTitle: '',
                 noteContent: '',
-            }
+            },
+
+            notes: [],
         }     
     }
 
-    callBack = (note) =>
+    loadNote = (note) =>
     {
-
         this.setState(
             {
-                note: note,
+                currentNote: note,
             }
         )
     };
+
+    addNewNote = () => 
+    {
+        debugger;
+        const newBlankNote = {...this.blankNote};
+        const notes = [...this.state.notes];
+        newBlankNote.id = Date.now();
+        notes.push(newBlankNote);
+        this.setState(
+            {
+                currentNote: newBlankNote,
+                notes: notes
+            }
+        )
+        
+    }
+
 
     render()
     {
@@ -33,11 +52,18 @@ class Main extends React.Component {
                 className="Main"
                 style={style}
             >
-                <Sidebar />
-                <NoteList callBack={this.callBack} />
-                <NoteForm note={this.state.note} />
+                <Sidebar onAddCallback={this.addNewNote} />
+                <NoteList onClickCallback={this.loadNote} notes={this.state.notes} />
+                <NoteForm note={this.state.currentNote} />
             </div>
         );
+    }
+
+    blankNote = 
+    {
+        id: null,
+        noteTitle: '',
+        noteContent: '',
     }
 }
 

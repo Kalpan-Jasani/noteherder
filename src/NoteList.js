@@ -53,7 +53,12 @@ class NoteList extends React.Component
                     this.state.noteArray.map(
                         (value) => 
                         {
-                            return (<NoteBox note={value} />);
+                            return (
+                                <NoteBox 
+                                    callBack={this.props.callBack}
+                                    note={value} 
+                                />
+                            );
                         }
                     )
                 
@@ -82,16 +87,28 @@ class NoteBox extends React.Component
         };
     }
 
+    handleClick()
+    {
+        this.props.callBack(this.state.note);
+    }
     render()
     {
         const anchorElement = (
-            <a className="active">
+            <a
+                onClick={
+                    () => {
+                        console.log("Kalpan");
+                        this.handleClick()
+                    }
+                }
+                className="active"
+            >
               <li>
-                <div class="note">
-                  <div class="note-title">
+                <div className="note">
+                  <div className="note-title">
                     {this.state.note.noteTitle}
                   </div>
-                  <div class="note-body">
+                  <div className="note-body">
                     <p>
                         {this.state.note.noteContent}
                     </p>

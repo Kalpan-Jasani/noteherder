@@ -10,15 +10,36 @@ class Main extends React.Component {
         this.state = 
         {
             //setting current note to an empty note initially, not null or undefined
-            currentNote: {
-                noteTitle: '',
-                noteContent: '',
-            },
-
+            currentNote: this.blankNote,
             notes: [],
         }     
     }
 
+    updateNote = (note) =>
+    {
+        const index = this.state.notes.findIndex(
+            (currNote) =>
+            {
+                if(currNote.id === note.id)
+                    return true;
+                return false;
+            }
+        )
+
+        const notes = [...this.state.notes];
+
+        //update the copy of the array
+        notes[index] = note;
+
+        //update the real array
+        this.setState(
+            {
+                //update the notes variable with the notes variable we have
+                notes
+            }
+            
+        )
+    }
     loadNote = (note) =>
     {
         this.setState(
@@ -30,7 +51,6 @@ class Main extends React.Component {
 
     addNewNote = () => 
     {
-        debugger;
         const newBlankNote = {...this.blankNote};
         const notes = [...this.state.notes];
         newBlankNote.id = Date.now();
@@ -54,7 +74,7 @@ class Main extends React.Component {
             >
                 <Sidebar onAddCallback={this.addNewNote} />
                 <NoteList onClickCallback={this.loadNote} notes={this.state.notes} />
-                <NoteForm note={this.state.currentNote} />
+                <NoteForm note={this.state.currentNote} onNoteUpdate={this.updateNote}/>
             </div>
         );
     }

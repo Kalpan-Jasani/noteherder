@@ -1,55 +1,42 @@
 import React from 'react';
 
-class NoteForm extends React.Component
+const NoteForm = ({note, ...props}) => 
 {
-    constructor(props)
+    // we will always have a note in the props, be it a blank note
+    const handleKeyPress = (ev) => 
     {
-        super(props);
-
-        let note = this.props.note;
-        console.log("Kalpan J");
-
-        //if note is not given (which will always be when this app is shipped, then just have it be an object with empty title and content, but not undefined
-        if(note == undefined)
+        ev.preventDefault();
+        if(ev.target.name === "title")
         {
-            note = {
-                noteTitle: "",
-                noteContent: "",
-            };
+            const noteCopy = note;
+            noteCopy.noteTitle += ev.key;
+            props.onNoteUpdate(noteCopy);
         }
-
-        this.state = {
-            note: note
-        };
     }
-
-    render()
-    {
-        return (
-            <div className="NoteForm">
-                <div className="form-actions">
-                    <button type="button">
-                        <i className="fa fa-trash-o"></i>
-                    </button>
-                </div>
-                <form>
-                    <p>
-                    <input
-                        type="text"
-                        name="title"
-                        placeholder="Title your note"
-                        value={this.props.note.noteTitle}
-                    />
-                    </p>
-                    
-                    <textarea name="body" value ={this.props.note.noteContent} >
-                        
-                    </textarea>
-                </form>
+    return (
+        <div className="NoteForm">
+            <div className="form-actions">
+                <button type="button">
+                    <i className="fa fa-trash-o"></i>
+                </button>
             </div>
-        )
-    }
-    
+            <form>
+                <p>
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="Title your note"
+                    value={note.noteTitle}
+                    onKeyPress={(ev) => handleKeyPress(ev)}
+                />
+                </p>
+                
+                <textarea name="body" value ={note.noteContent} >
+                    
+                </textarea>
+            </form>
+        </div>
+    );
 }
 
 

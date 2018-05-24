@@ -3,14 +3,19 @@ import React from 'react';
 const NoteForm = ({note, ...props}) => 
 {
     // we will always have a note in the props, be it a blank note
-    const handleKeyPress = (ev) => 
+    const handleChange = (ev) => 
     {
         ev.preventDefault();
         if(ev.target.name === "title")
         {
-            const noteCopy = note;
-            noteCopy.noteTitle += ev.key;
-            props.onNoteUpdate(noteCopy);
+            note.noteTitle = ev.target.value;
+            props.onNoteUpdate(note);
+        }
+
+        else if(ev.target.name === "body")
+        {
+            note.noteContent = ev.target.value;
+            props.onNoteUpdate(note);
         }
     }
     return (
@@ -27,11 +32,15 @@ const NoteForm = ({note, ...props}) =>
                     name="title"
                     placeholder="Title your note"
                     value={note.noteTitle}
-                    onKeyPress={(ev) => handleKeyPress(ev)}
+                    onChange={(ev) => handleChange(ev)}
                 />
                 </p>
                 
-                <textarea name="body" value ={note.noteContent} >
+                <textarea 
+                    name="body" 
+                    value ={note.noteContent}
+                    onChange={(ev) => handleChange(ev)}
+                     >
                     
                 </textarea>
             </form>

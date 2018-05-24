@@ -60,7 +60,6 @@ class Main extends React.Component {
             notes[index] = note;
         }
 
-        console.log(notes);
         //update the real array
         this.setState(
             {
@@ -68,12 +67,19 @@ class Main extends React.Component {
                 currentNote: note,
                 notes: notes,
             }
-            
         );
+    }
 
-        console.log(this.state.notes);
-        this.localStorage.setItem("state", JSON.stringify(this.state));
-
+    setState = (state) => 
+    {
+        super.setState(state, 
+            () => 
+            {
+                //this is called after state has actually been updated
+                this.localStorage.setItem("state", JSON.stringify(this.state));
+                console.log(this.state);
+            }
+        )
     }
 
     loadNote = (note) =>
@@ -122,9 +128,11 @@ class Main extends React.Component {
                 currentNote: (notes.length === 0 ? {...this.blankNote} : notes[0]),
                 notes
             }
-        
-        )
+        );
+
+
     }
+
     render()
     {
         return(

@@ -81,7 +81,30 @@ class Main extends React.Component {
         
     }
 
+    onDeleteNote = (note) =>
+    {
+        let index = this.state.notes.findIndex(
+            (currNote) =>
+            {
+                if(currNote.id === note.id)
+                    return true;
+                return false;
+            }
+        );
 
+        const notes = [...this.state.notes];
+
+        //remove this note from the copy of the notes array
+        notes.splice(index, 1);
+
+        //set the state to match the new array, and set the current note to the first or a blank one
+        this.setState(
+            {
+                currentNote: (notes.length === 0 ? {...this.blankNote} : notes[0]),
+                notes
+            }
+        )
+    }
     render()
     {
         return(
@@ -91,7 +114,11 @@ class Main extends React.Component {
             >
                 <Sidebar onAddCallback={this.addNewNote} />
                 <NoteList onClickCallback={this.loadNote} notes={this.state.notes} />
-                <NoteForm note={this.state.currentNote} onNoteUpdate={this.updateNote}/>
+                <NoteForm 
+                    note={this.state.currentNote} 
+                    onNoteUpdate={this.updateNote} 
+                    onDeleteNote={this.onDeleteNote}
+                />
             </div>
         );
     }

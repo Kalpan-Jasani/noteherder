@@ -18,10 +18,17 @@ const NoteForm = ({note, ...props}) =>
             props.onNoteUpdate(note);
         }
     }
+
+    const onDeleteNote = (ev) =>
+    {
+        ev.preventDefault();
+        props.onDeleteNote(note);
+
+    }
     return (
         <div className="NoteForm">
             <div className="form-actions">
-                <button type="button">
+                <button onClick={onDeleteNote} type="button">
                     <i className="fa fa-trash-o"></i>
                 </button>
             </div>

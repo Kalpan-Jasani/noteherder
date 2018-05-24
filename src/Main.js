@@ -7,12 +7,28 @@ class Main extends React.Component {
     constructor(props)
     {
         super(props);
-        this.state = 
+
+
+        if(this.checkIsLocalStorageAvailable())
+            this.localStorage = window.localStorage;
+        else
+            this.localStorage = null;
+
+        //if there is previous state stored in storage
+        if(this.localStorage.getItem("state"))
+        {  
+            this.state = JSON.parse(this.localStorage.getItem("state"));
+        }
+        else
         {
-            //setting current note to an empty note initially, not null or undefined
-            currentNote: {...this.blankNote},
-            notes: [],
-        }     
+            this.state = 
+            {
+                //setting current note to an empty note initially, not null or undefined
+                currentNote: {...this.blankNote},
+                notes: [],
+            }  
+        }
+   
     }
 
     //this will update a note if it exists, or will add it into the notelist
@@ -36,7 +52,6 @@ class Main extends React.Component {
             note.id = Date.now();
             notes.push(note);
             index = notes.length - 1;
-            console.log("flag1");   
         }
 
         else
@@ -45,16 +60,20 @@ class Main extends React.Component {
             notes[index] = note;
         }
 
-        
+        console.log(notes);
         //update the real array
         this.setState(
             {
                 //update the notes variable with the notes variable we have
                 currentNote: note,
-                notes
+                notes: notes,
             }
             
         );
+
+        console.log(this.state.notes);
+        this.localStorage.setItem("state", JSON.stringify(this.state));
+
     }
 
     loadNote = (note) =>
@@ -103,6 +122,7 @@ class Main extends React.Component {
                 currentNote: (notes.length === 0 ? {...this.blankNote} : notes[0]),
                 notes
             }
+        
         )
     }
     render()
@@ -129,6 +149,32 @@ class Main extends React.Component {
         noteTitle: '',
         noteContent: '',
     };
+
+    checkIsLocalStorageAvailable()
+    {
+        try {
+            var storage = window['localStorage'],
+                x = '__storage_test__';
+            storage.setItem(x, x);
+            storage.removeItem(x);
+            return true;
+        }
+        catch(e) {
+            return e instanceof DOMException && (
+                // everything except Firefox
+                e.code === 22 ||
+                // Firefox
+                e.code === 1014 ||
+                // test name field too, because code might not be present
+                // everything except Firefox
+                e.name === 'QuotaExceededError' ||
+                // Firefox
+                e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+                // acknowledge QuotaExceededError only if there's something already stored
+                storage.length !== 0;
+        }
+
+    }
 }
 
 const style = 

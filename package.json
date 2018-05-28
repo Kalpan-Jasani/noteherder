@@ -5,6 +5,7 @@
   "homepage": "https://kalpan-jasani.github.io/noteherder",
   "dependencies": {
     "eslint": "^4.19.1",
+    "firebase": "^5.0.4",
     "gh-pages": "^1.1.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",

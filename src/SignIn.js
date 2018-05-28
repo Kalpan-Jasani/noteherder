@@ -1,12 +1,13 @@
 import React from 'react';
 import quill from './quill.svg';
+import firebase from 'firebase';
 
 const SignInBox = ({handleAuth}) => 
 {
-    const onSignInClick = (ev) =>
+    const onSignInClick = (provider, ev) =>
     {
         ev.preventDefault();
-        handleAuth();
+        handleAuth(provider);
         //TODO: handle authorization
     }
     return(
@@ -20,14 +21,24 @@ const SignInBox = ({handleAuth}) =>
             <p>You never know when you'll need to write crap down. In fact, you should probably be taking notes right now.</p>
             <button 
                 className="github"
-                onClick={onSignInClick}
+                onClick={(ev) => 
+                {
+                    const provider = new firebase.auth.GithubAuthProvider();
+                    onSignInClick(provider, ev);   
+                }}
             >
                 <i className="fa fa-github"></i>
                 Sign in with GitHub
             </button>
             <button 
                 className="google"
-                onClick={onSignInClick}
+                onClick={ (ev) =>
+                    {
+                        const provider = new firebase.auth.GoogleAuthProvider();
+                        onSignInClick(provider, ev);
+
+                    }   
+                }
             >
                 <img src="media/google.svg" alt="" />
                 Sign in with Google

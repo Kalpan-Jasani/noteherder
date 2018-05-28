@@ -3,6 +3,11 @@ import React, { Component } from 'react';
 import './App.css';
 import Main from './Main.js';
 import SignIn from './SignIn.js';
+import './baseSetup';
+import firebase from 'firebase'
+
+//TODO: check what this line is implementing
+require('./baseSetup');
 
 class App extends Component {
   constructor()
@@ -13,24 +18,30 @@ class App extends Component {
     }
   }
 
-  handleAuth = () =>
+  handleAuth = (provider) =>
+  {
+    //TODO: change to redirect later on
+    firebase.auth().signInWithPopup(provider).then((result) => this.setSignIn(result.user), (result) => this.setSignOut());
+  }
+
+
+  setSignIn = (result) =>  
   {
     this.setState(
       {
-        uid: "kalpan"
+        uid: result.user
       }
-    )
+    );
   }
 
-
-  signIn = (provider) =>  
+  setSignOut = () =>
   {
-      
-  }
-
-  signOut = () =>
-  {
-    
+      console.log("flag2");
+      this.setState(
+        {
+          uid: null,
+        }
+      ) 
   }
 
   render() {

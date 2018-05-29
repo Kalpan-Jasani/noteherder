@@ -3,11 +3,8 @@ import React, { Component } from 'react';
 import './App.css';
 import Main from './Main.js';
 import SignIn from './SignIn.js';
-import './baseSetup';
-import firebase from 'firebase'
-
-//TODO: check what this line is implementing
-require('./baseSetup');
+import rebaseObj from './baseSetup';
+import firebase from 'firebase';
 
 class App extends Component {
   constructor()
@@ -16,32 +13,46 @@ class App extends Component {
     this.state = {
       uid: null,
     }
+
+
+    //when page reloads, we want to know the state of sign in in firebase. If there was no previous user sign in, the failure  function is called, with a userCredential of null
+    firebase.auth().getRedirectResult().then(
+      (userCredential) =>
+      {
+        this.setSignIn(userCredential.user);
+      },
+      () => 
+      {
+        this.setSignOut();
+      }
+    );
   }
 
   handleAuth = (provider) =>
   {
-    //TODO: change to redirect later on
-    firebase.auth().signInWithPopup(provider).then((result) => this.setSignIn(result.user), (result) => this.setSignOut());
+    firebase.auth().signInWithRedirect(provider);
   }
 
 
-  setSignIn = (result) =>  
+  setSignIn = (user) =>  
   {
     this.setState(
       {
-        uid: result.user
+        uid: user
       }
     );
   }
 
   setSignOut = () =>
   {
-      console.log("flag2");
       this.setState(
         {
           uid: null,
         }
       ) 
+
+      //signing out of some account in some popular social app
+      firebase.auth().signOut();
   }
 
   render() {
@@ -50,7 +61,7 @@ class App extends Component {
         {
           this.state.uid === null
             ? <SignIn handleAuth={this.handleAuth}/>
-            : <Main />
+            : <Main handleSignOut={this.setSignOut} />
         }
       </div>
     );

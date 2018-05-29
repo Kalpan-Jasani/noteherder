@@ -140,8 +140,14 @@ class Main extends React.Component {
                 className="Main"
                 style={style}
             >
-                <Sidebar onAddCallback={this.addNewNote} />
-                <NoteList onClickCallback={this.loadNote} notes={this.state.notes} />
+                <Sidebar 
+                    handleSignOut={this.props.handleSignOut} 
+                    onAddCallback={this.addNewNote} 
+                />
+                <NoteList 
+                    onClickCallback={this.loadNote} 
+                    notes={this.state.notes} 
+                />
                 <NoteForm 
                     note={this.state.currentNote} 
                     onNoteUpdate={this.updateNote} 

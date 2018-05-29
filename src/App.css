@@ -282,6 +282,7 @@ h5 {
   border: none;
   background: none;
   padding: 0;
+  cursor: pointer;
 }
 .NoteForm button[type=submit] {
   background-color: #008bf8;

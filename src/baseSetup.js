@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import rebase from 're-base';
 // Initialize Firebase
 const config = 
 {
@@ -10,4 +11,8 @@ const config =
     messagingSenderId: "1087085033228"
 };
 
-firebase.initializeApp(config);
+const app = firebase.initializeApp(config);
+const db = firebase.database(app);
+const rebaseObj = rebase.createClass(db);
+
+export default rebaseObj;

@@ -4,7 +4,7 @@ import newIcon from './new.png';
 import newHover from './new-hover.png';
 import { StyleSheet, css } from 'aphrodite';
 
-const Sidebar = (props) =>
+const Sidebar = ({handleSignOut, ...props}) =>
 {
     return(
         <nav className={css(styles.Sidebar)}>
@@ -33,6 +33,7 @@ const Sidebar = (props) =>
             <div className={css(styles.SignOut)} >
                 <button
                     className={css(styles.SignOutButton, styles.button)}
+                    onClick={handleSignOut}
                 >
                     <i 
                         className={`fa fa-sign-out ${css(styles.SignOutFont)}` }

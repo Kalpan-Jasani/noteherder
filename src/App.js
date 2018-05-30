@@ -4,7 +4,7 @@ import './App.css';
 import Main from './Main.js';
 import SignIn from './SignIn.js';
 import rebaseObj from './baseSetup';
-import firebase from 'firebase';
+import {auth} from './baseSetup';
 
 class App extends Component {
   constructor()
@@ -16,7 +16,7 @@ class App extends Component {
 
 
     //when page reloads, we want to know the state of sign in in firebase. If there was no previous user sign in, the failure  function is called, with a userCredential of null
-    firebase.auth().getRedirectResult().then(
+    auth.getRedirectResult().then(
       (userCredential) =>
       {
         this.setSignIn(userCredential.user);
@@ -30,7 +30,7 @@ class App extends Component {
 
   handleAuth = (provider) =>
   {
-    firebase.auth().signInWithRedirect(provider);
+    auth.signInWithRedirect(provider);
   }
 
 
@@ -52,7 +52,7 @@ class App extends Component {
       ) 
 
       //signing out of some account in some popular social app
-      firebase.auth().signOut();
+      auth.signOut();
   }
 
   render() {
@@ -61,7 +61,7 @@ class App extends Component {
         {
           this.state.uid === null
             ? <SignIn handleAuth={this.handleAuth}/>
-            : <Main handleSignOut={this.setSignOut} />
+            : <Main uid={this.state.uid} handleSignOut={this.setSignOut} />
         }
       </div>
     );

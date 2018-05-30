@@ -1,7 +1,6 @@
 import React from 'react';
 import quill from './quill.svg';
-import firebase from 'firebase';
-
+import * as firebaseStuff from './baseSetup'
 const SignInBox = ({handleAuth}) => 
 {
     const onSignInClick = (provider, ev) =>
@@ -23,7 +22,7 @@ const SignInBox = ({handleAuth}) =>
                 className="github"
                 onClick={(ev) => 
                 {
-                    const provider = new firebase.auth.GithubAuthProvider();
+                    const provider = firebaseStuff.gitHubAuthProvider;
                     onSignInClick(provider, ev);   
                 }}
             >
@@ -34,7 +33,7 @@ const SignInBox = ({handleAuth}) =>
                 className="google"
                 onClick={ (ev) =>
                     {
-                        const provider = new firebase.auth.GoogleAuthProvider();
+                        const provider = firebaseStuff.googleAuthProvider;
                         onSignInClick(provider, ev);
 
                     }   

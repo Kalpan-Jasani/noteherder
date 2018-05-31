@@ -2,7 +2,7 @@ import React from 'react';
 import Sidebar from "./Sidebar.js";
 import NoteList from "./NoteList.js";
 import NoteForm from "./NoteForm.js";
-import rebaseObj, {auth} from "./baseSetup.js";
+import rebaseObj from "./baseSetup.js";
 
 class Main extends React.Component {
     constructor(props)
@@ -61,7 +61,6 @@ class Main extends React.Component {
         );
 
         const notes = [...this.state.notes];
-
         if(index === -1)
         {
 
@@ -77,14 +76,21 @@ class Main extends React.Component {
             notes[index] = note;
         }
 
+        note.timestamp = Date.now();
+
+        //sort in descending order on timestamp
+        notes.sort((note1, note2) => (note2.timestamp - note1.timestamp));
+
         //update the real array
         this.setState(
             {
                 //update the notes variable with the notes variable we have
                 currentNote: note,
-                notes: notes,
+                notes,
             }
         );
+
+        
     }
 
     loadNote = (note) =>
@@ -101,7 +107,8 @@ class Main extends React.Component {
         const newBlankNote = {...this.blankNote};
         const notes = [...this.state.notes];
         newBlankNote.id = Date.now();
-        notes.push(newBlankNote);
+        newBlankNote.timestamp = Date.now();
+        notes.unshift(newBlankNote);
         this.setState(
             {
                 currentNote: newBlankNote,
@@ -171,32 +178,6 @@ class Main extends React.Component {
         //setting initial time stamp to invalid
         timestamp: -1,
     };
-
-    checkIsLocalStorageAvailable()
-    {
-        try {
-            var storage = window['localStorage'],
-                x = '__storage_test__';
-            storage.setItem(x, x);
-            storage.removeItem(x);
-            return true;
-        }
-        catch(e) {
-            return e instanceof DOMException && (
-                // everything except Firefox
-                e.code === 22 ||
-                // Firefox
-                e.code === 1014 ||
-                // test name field too, because code might not be present
-                // everything except Firefox
-                e.name === 'QuotaExceededError' ||
-                // Firefox
-                e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
-                // acknowledge QuotaExceededError only if there's something already stored
-                storage.length !== 0;
-        }
-
-    }
 }
 
 const style = 

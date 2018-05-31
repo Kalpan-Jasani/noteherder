@@ -35,6 +35,15 @@ class NoteBox extends React.Component
     {
         this.props.callback(this.props.note);
     }
+
+    milliSecondsToString(milliSeconds)
+    {
+        const date = new Date();
+        date.setTime(milliSeconds);
+        let displayString = "";
+        displayString = `${date.toLocaleTimeString()}, ${date.toLocaleDateString()}`;
+        return displayString;
+    }
     render()
     {
         const anchorElement = (
@@ -46,18 +55,21 @@ class NoteBox extends React.Component
                 }
                 className="active"
             >
-              <li>
-                <div className="note">
-                  <div className="note-title">
-                    {this.props.note.noteTitle}
-                  </div>
-                  <div className="note-body">
-                    <p>
-                        {this.props.note.noteContent}
-                    </p>
-                  </div>
-                </div>
-              </li>
+                <li>
+                    <div className="note">
+                        <div className="note-title">
+                            {this.props.note.noteTitle || "(Empty)"}
+                        </div>
+                        <div className="note-body">
+                            <p>
+                                {this.props.note.noteContent || "(Empty body)"}
+                            </p>
+                            <p>
+                                Updated: {this.milliSecondsToString(this.props.note.timestamp)}
+                            </p>
+                        </div>
+                    </div>
+                </li>
             </a>
         );
         

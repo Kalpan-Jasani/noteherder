@@ -86,10 +86,7 @@ class App extends Component {
   setState = (state) =>
   {
     if(state.uid && this.checkIsLocalStorageAvailable())
-    {
       super.setState(state, () => {localStorage.setItem("uid", state.uid)});
-
-    }
     else
       super.setState(state);
   }

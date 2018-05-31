@@ -1,7 +1,8 @@
 import React from 'react';
 import Sidebar from "./Sidebar.js";
 import NoteList from "./NoteList.js";
-import NoteForm from "./NoteForm.js"
+import NoteForm from "./NoteForm.js";
+import rebaseObj from "./baseSetup.js";
 
 class Main extends React.Component {
     constructor(props)
@@ -28,7 +29,16 @@ class Main extends React.Component {
                 notes: [],
             }  
         }
-   
+
+        //set up a two way syncing with firebase. TODO: check whether this needs to be called everytime
+        rebaseObj.syncState(`${this.props.uid}/`
+            ,
+            {
+                context: this,
+                state: `${this.state.notes}`,
+                asArray: true,
+            }
+        );
     }
 
     //this will update a note if it exists, or will add it into the notelist

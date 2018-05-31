@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 class NoteList extends React.Component
 {
@@ -8,27 +8,24 @@ class NoteList extends React.Component
             <div className="NoteList">
                 <h3>Notes</h3>
                 <ul id="notes">
-                {
-                    this.props.notes.map(
-                        (value) => 
-                        {
-                            return (
-                                <NoteBox
-                                    callback={this.props.onClickCallback}
-                                    note={value} 
-                                />
-                            );
-                        }
-                    )
-                
-                }
+                    {
+                        this.props.notes.map(
+                            (value) => 
+                            {
+                                return (
+                                    <NoteBox
+                                        callback={this.props.onClickCallback}
+                                        note={value} 
+                                    />
+                                );
+                            }
+                        )
+                    
+                    }
                 </ul>
             </div>
-        )
+        );
     }
-    
-    
-
 }
 
 class NoteBox extends React.Component

@@ -4,7 +4,6 @@
   "private": true,
   "homepage": "https://kalpan-jasani.github.io/noteherder",
   "dependencies": {
-    "eslint": "^4.19.1",
     "firebase": "^5.0.4",
     "gh-pages": "^1.1.0",
     "re-base": "^3.2.3",
@@ -23,5 +22,9 @@
   },
   "eslintconfig": {
     "extends": "react-app"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-plugin-react": "^7.8.2"
   }
 }

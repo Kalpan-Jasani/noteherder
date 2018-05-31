@@ -5,6 +5,7 @@ import Main from './Main.js';
 import SignIn from './SignIn.js';
 import rebaseObj from './baseSetup';
 import {auth} from './baseSetup';
+import {Switch, Route, Redirect} from 'react-router-dom';
 
 class App extends Component {
   constructor()
@@ -16,16 +17,15 @@ class App extends Component {
 
 
     //when page reloads, we want to know the state of sign in in firebase. If there was no previous user sign in, the failure  function is called, with a userCredential of null
-    auth.getRedirectResult().then(
-      (userCredential) =>
-      {
-        this.setSignIn(userCredential.user);
-      },
-      () => 
-      {
-        this.setSignOut();
-      }
-    );
+    auth.onAuthStateChanged(
+        (user) =>
+        {
+          user != null ?
+            this.setSignIn(user)
+            : this.setSignOut();
+
+        }
+      );
   }
 
   handleAuth = (provider) =>
@@ -38,7 +38,7 @@ class App extends Component {
   {
     this.setState(
       {
-        uid: user
+        uid: user.uid
       }
     );
   }
@@ -59,9 +59,32 @@ class App extends Component {
     return (
       <div className="App">
         {
-          this.state.uid === null
-            ? <SignIn handleAuth={this.handleAuth}/>
-            : <Main uid={this.state.uid} handleSignOut={this.setSignOut} />
+          <Switch>
+              <Route 
+                path={"/sign-in"}
+                render=
+                {
+                  () => 
+                  this.state.uid ? <Redirect to="/notes" /> : <SignIn handleAuth={this.handleAuth}/>
+                }
+              />
+              <Route
+                path={"/notes"}
+                render={() => <Main uid={this.state.uid} handleSignOut={this.setSignOut} />}
+              />
+              <Route render=
+              {
+                  () =>
+                  {
+                      console.log(this.state.uid);
+                      return(
+                        this.state.uid ? <Redirect to="/notes" /> : <Redirect to="/sign-in" />
+                      )
+                  }
+                  
+              }
+              />
+          </Switch>
         }
       </div>
     );

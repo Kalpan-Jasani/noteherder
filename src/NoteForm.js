@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const NoteForm = ({note, ...props}) => 
 {
@@ -17,14 +17,14 @@ const NoteForm = ({note, ...props}) =>
             note.noteContent = ev.target.value;
             props.onNoteUpdate(note);
         }
-    }
+    };
 
     const onDeleteNote = (ev) =>
     {
         ev.preventDefault();
         props.onDeleteNote(note);
 
-    }
+    };
     return (
         <div className="NoteForm">
             <div className="form-actions">
@@ -34,26 +34,26 @@ const NoteForm = ({note, ...props}) =>
             </div>
             <form>
                 <p>
-                <input
-                    type="text"
-                    name="title"
-                    placeholder="Title your note"
-                    value={note.noteTitle}
-                    onChange={(ev) => handleChange(ev)}
-                />
+                    <input
+                        type="text"
+                        name="title"
+                        placeholder="Title your note"
+                        value={note.noteTitle}
+                        onChange={(ev) => handleChange(ev)}
+                    />
                 </p>
                 
                 <textarea 
                     name="body" 
                     value ={note.noteContent}
                     onChange={(ev) => handleChange(ev)}
-                     >
+                >
                     
                 </textarea>
             </form>
         </div>
     );
-}
+};
 
 
 export default NoteForm;

@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import './App.css';
 import Main from './Main.js';
 import SignIn from './SignIn.js';
-import rebaseObj from './baseSetup';
 import {auth} from './baseSetup';
 import {Switch, Route, Redirect} from 'react-router-dom';
 
@@ -16,7 +15,7 @@ class App extends Component {
     }
 
 
-    //when page reloads, we want to know the state of sign in in firebase. If there was no previous user sign in, the failure  function is called, with a userCredential of null
+    //to handle changes of sign in state
     auth.onAuthStateChanged(
         (user) =>
         {
@@ -28,6 +27,14 @@ class App extends Component {
       );
   }
 
+  componentDidMount = () =>
+  {
+    this.setState(
+      {
+      uid: localStorage.getItem("uid"),
+      }
+    )
+  }
   handleAuth = (provider) =>
   {
     auth.signInWithRedirect(provider);
@@ -53,8 +60,16 @@ class App extends Component {
 
       //signing out of some account in some popular social app
       auth.signOut();
+
+      //proceeding to the homepage
+      //TODO: check if this results in the apps home page, or the server's homepage
+      this.props.history.push("/");
   }
 
+  setState = (state) =>
+  {
+    super.setState(state, localStorage.setItem("uid", this.state.uid || null));
+  }
   render() {
     return (
       <div className="App">
@@ -76,7 +91,6 @@ class App extends Component {
               {
                   () =>
                   {
-                      console.log(this.state.uid);
                       return(
                         this.state.uid ? <Redirect to="/notes" /> : <Redirect to="/sign-in" />
                       )

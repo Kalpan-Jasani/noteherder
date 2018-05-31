@@ -29,18 +29,20 @@ class Main extends React.Component {
                 notes: [],
             }  
         }
+    }
 
+    componentDidMount = () =>
+    {
         //set up a two way syncing with firebase. TODO: check whether this needs to be called everytime
-        rebaseObj.syncState(`${this.props.uid}/`
+        rebaseObj.syncState(`${this.props.uid}`
             ,
             {
                 context: this,
-                state: `${this.state.notes}`,
+                state: "notes",
                 asArray: true,
             }
         );
     }
-
     //this will update a note if it exists, or will add it into the notelist
     updateNote = (note) =>
     {
@@ -87,7 +89,6 @@ class Main extends React.Component {
             {
                 //this is called after state has actually been updated
                 this.localStorage.setItem("state", JSON.stringify(this.state));
-                console.log(this.state);
             }
         )
     }

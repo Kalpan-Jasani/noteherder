@@ -1,8 +1,8 @@
-import React from 'react';
-import quill from './quill.svg';
-import newIcon from './new.png';
-import newHover from './new-hover.png';
-import { StyleSheet, css } from 'aphrodite';
+import React from "react";
+import quill from "./quill.svg";
+import newIcon from "./new.png";
+import newHover from "./new-hover.png";
+import { StyleSheet, css } from "aphrodite";
 
 const Sidebar = ({handleSignOut, ...props}) =>
 {
@@ -14,7 +14,9 @@ const Sidebar = ({handleSignOut, ...props}) =>
             <a  
                 className={css(styles.newNote)} 
                 href="/notes"
-                onClick={ (ev) =>
+                onClick=
+                { 
+                    (ev) =>
                     {
                         ev.preventDefault();
                         props.onAddCallback();

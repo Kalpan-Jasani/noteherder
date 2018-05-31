@@ -16,6 +16,7 @@ class NoteList extends React.Component
                                     <NoteBox
                                         callback={this.props.onClickCallback}
                                         note={value} 
+                                        key={value.id}
                                     />
                                 );
                             }

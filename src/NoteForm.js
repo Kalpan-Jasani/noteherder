@@ -5,7 +5,7 @@ const NoteForm = ({note, ...props}) =>
     // we will always have a note in the props, be it a blank note
     const handleChange = (ev) => 
     {
-        ev.preventDefault();
+        //TODO: check if we need ev.preventDefault();
         if(ev.target.name === "title")
         {
             note.noteTitle = ev.target.value;

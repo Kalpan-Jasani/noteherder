@@ -2,32 +2,17 @@ import React from 'react';
 import Sidebar from "./Sidebar.js";
 import NoteList from "./NoteList.js";
 import NoteForm from "./NoteForm.js";
-import rebaseObj from "./baseSetup.js";
+import rebaseObj, {auth} from "./baseSetup.js";
 
 class Main extends React.Component {
     constructor(props)
     {
         super(props);
-
-
-        if(this.checkIsLocalStorageAvailable())
-            this.localStorage = window.localStorage;
-        else
-            this.localStorage = null;
-
-        //if there is previous state stored in storage
-        if(this.localStorage.getItem("state"))
-        {  
-            this.state = JSON.parse(this.localStorage.getItem("state"));
-        }
-        else
+        this.state = 
         {
-            this.state = 
-            {
-                //setting current note to an empty note initially, not null or undefined
-                currentNote: {...this.blankNote},
-                notes: [],
-            }  
+            //setting current note to an empty note initially, not null or undefined
+            currentNote: {...this.blankNote},
+            notes: [],
         }
     }
 
@@ -42,6 +27,26 @@ class Main extends React.Component {
                 asArray: true,
             }
         );
+    }
+
+    componentDidUpdate = (prevProps, prevState, snapshot) =>
+    {
+        //we will call syncState, when we get a signed in user. 
+        //But how can we get that?
+        // We will check if the prev props did not have a uid, AND the current one has a uid set. 
+        //Therefore, we have a new signed in user, and we will perform the syncState
+        if(prevProps.uid == null && this.props.uid != null )
+        {
+            //sync state with the new uid
+            rebaseObj.syncState(this.props.uid.toString()
+            ,
+            {
+                context: this, 
+                state: "notes",
+                asArray: true
+            }
+            )
+        }
     }
     //this will update a note if it exists, or will add it into the notelist
     updateNote = (note) =>
@@ -80,17 +85,6 @@ class Main extends React.Component {
                 notes: notes,
             }
         );
-    }
-
-    setState = (state) => 
-    {
-        super.setState(state, 
-            () => 
-            {
-                //this is called after state has actually been updated
-                this.localStorage.setItem("state", JSON.stringify(this.state));
-            }
-        )
     }
 
     loadNote = (note) =>
@@ -173,6 +167,9 @@ class Main extends React.Component {
         id: null,
         noteTitle: '',
         noteContent: '',
+        
+        //setting initial time stamp to invalid
+        timestamp: -1,
     };
 
     checkIsLocalStorageAvailable()

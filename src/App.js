@@ -10,9 +10,32 @@ class App extends Component {
   constructor()
   {
     super();
-    this.state = {
-      uid: null,
+
+    if(this.checkIsLocalStorageAvailable())
+    {
+        const localUid = localStorage.getItem("uid");
+        if(localUid !== null)
+        {
+          this.state = {
+            uid: localUid,
+          };
+        }
+
+        else
+        {
+          this.state = {
+            uid: null,
+          };
+        }
+        
     }
+    else
+    {
+      this.state = {
+        uid: null,
+      };
+    }
+      
 
 
     //to handle changes of sign in state
@@ -27,17 +50,9 @@ class App extends Component {
       );
   }
 
-  componentDidMount = () =>
-  {
-    this.setState(
-      {
-      uid: localStorage.getItem("uid"),
-      }
-    )
-  }
   handleAuth = (provider) =>
   {
-    auth.signInWithRedirect(provider);
+       auth.signInWithRedirect(provider)    
   }
 
 
@@ -56,11 +71,13 @@ class App extends Component {
         {
           uid: null,
         }
-      ) 
+      );
 
       //signing out of some account in some popular social app
       auth.signOut();
 
+      if(this.checkIsLocalStorageAvailable())
+        localStorage.clear();
       //proceeding to the homepage
       //TODO: check if this results in the apps home page, or the server's homepage
       this.props.history.push("/");
@@ -68,7 +85,13 @@ class App extends Component {
 
   setState = (state) =>
   {
-    super.setState(state, localStorage.setItem("uid", this.state.uid || null));
+    if(state.uid && this.checkIsLocalStorageAvailable())
+    {
+      super.setState(state, () => {localStorage.setItem("uid", state.uid)});
+
+    }
+    else
+      super.setState(state);
   }
   render() {
     return (
@@ -85,7 +108,17 @@ class App extends Component {
               />
               <Route
                 path={"/notes"}
-                render={() => <Main uid={this.state.uid} handleSignOut={this.setSignOut} />}
+                render=
+                {() => 
+                  {
+                    return(
+                      this.state.uid ? 
+                      <Main uid={this.state.uid} handleSignOut={this.setSignOut} />
+                      : <Redirect to="/sign-in" />
+                    )
+                  }
+                }
+                  
               />
               <Route render=
               {
@@ -103,6 +136,32 @@ class App extends Component {
       </div>
     );
   }
+
+  checkIsLocalStorageAvailable()
+    {
+        try {
+            var storage = window['localStorage'],
+                x = '__storage_test__';
+            storage.setItem(x, x);
+            storage.removeItem(x);
+            return true;
+        }
+        catch(e) {
+            return e instanceof DOMException && (
+                // everything except Firefox
+                e.code === 22 ||
+                // Firefox
+                e.code === 1014 ||
+                // test name field too, because code might not be present
+                // everything except Firefox
+                e.name === 'QuotaExceededError' ||
+                // Firefox
+                e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+                // acknowledge QuotaExceededError only if there's something already stored
+                storage.length !== 0;
+        }
+
+    }
 }
 
 export default App;

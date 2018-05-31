@@ -14,7 +14,12 @@ const app = firebase.initializeApp({
     messagingSenderId: "1087085033228"
 });
 
-export const auth = firebase.auth();
+const auth = firebase.auth();
+
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
+export {auth};
+
 
 //getting providers
 export const gitHubAuthProvider = new firebase.auth.GithubAuthProvider();
@@ -23,5 +28,4 @@ export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 //initializing rebase
 const db = firebase.database(app);
 const rebaseObj = rebase.createClass(db);
-
 export default rebaseObj;
